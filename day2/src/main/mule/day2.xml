@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="3a766043-7d08-42a4-a1df-fedef445398d" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="c2daa788-8a4d-4bcf-b5b6-3eca998e7e97" >
+		<http:request-connection host="localhost" port="8081" connectionIdleTimeout="100000"/>
+	</http:request-config>
+	<flow name="day2Flow" doc:id="79ee5c74-1d3c-4829-a61e-059ed0a4db31" >
+		<http:listener doc:name="Listener" doc:id="ba64d3d9-bc59-48ed-8009-4f2174aab678" config-ref="HTTP_Listener_config" path="/hello"/>
+		<set-payload value="#['hello']" doc:name="Set Payload" doc:id="0a52727f-dd82-4745-8fb6-8722865ad251" />
+		<set-variable value="#[attributes.queryParams.fname]" doc:name="Set Variable" doc:id="daf07a71-47fd-4b3e-9d3c-d0cf135e5287" variableName="vname"/>
+		<http:request method="GET" doc:name="Request" doc:id="98ead354-ee5b-417e-9a0b-09aa4309115a" config-ref="HTTP_Request_configuration" path="/goodbye"/>
+		<logger level="INFO" doc:name="Logger" doc:id="87db137b-9fd7-4681-a1be-10d1132b89fc" message="#[vars.vname]"/>
+		<logger level="INFO" doc:name="Logger" doc:id="8e839bf5-dc04-488b-beb0-718175d728b4" message="#[attributes.queryParams.fname]"/>
+		<logger level="INFO" doc:name="Logger" doc:id="7e6f94d4-16a3-4de5-8c33-db6c1e2d554d" message="#[payload]"/>
+		<logger level="INFO" doc:name="Logger" doc:id="46209c61-d5b8-4143-931e-60172813fdfc" />
+	</flow>
+	<flow name="day2Flow1" doc:id="f82e8600-8c69-4d7f-82f4-1703d1b1e274" >
+		<http:listener doc:name="Listener" doc:id="22495716-22be-40a8-82c3-d8d80e8bdb6b" config-ref="HTTP_Listener_config" path="/goodbye"/>
+		<set-payload value="#['goodbye']" doc:name="Set Payload" doc:id="ce1bb410-07ae-4627-9bd5-0c6d3bc174b0" />
+		<set-payload value="#['shankar']" doc:name="Set Payload" doc:id="36a77842-0c30-47f7-8471-7e6f1f83da9b" />
+		<logger level="INFO" doc:name="Logger" doc:id="09206bf3-43a4-45ed-b0f1-9693f02dcc3e" message="#[vars.vname]"/>
+		<logger level="INFO" doc:name="Logger" doc:id="26d2ccc6-ca48-423a-a653-f05e1957b762" message="#[message]"/>
+	</flow>
+</mule>
