@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="fb5ab557-7c14-45d1-8746-35f017d64dcb" >
+		<http:listener-connection host="${http.listener.host}" port="${http.listener.port}" />
+	</http:listener-config>
+	<configuration-properties doc:name="Configuration properties" doc:id="e889dcb8-357c-4365-931f-d9819080b545" file="common.properties" />
+	<flow name="firstFlow" doc:id="92ffe95a-9334-40e6-a41a-4249e8e7dd9b" >
+		<http:listener doc:name="Listener" doc:id="a16d6013-72e1-45a0-a8e7-bbf54433aa89" config-ref="HTTP_Listener_config" path="/first" allowedMethods="GET" responseStreamingMode="NEVER">
+			<ee:repeatable-file-store-stream bufferUnit="BYTE" />
+		</http:listener>
+		<logger level="INFO" doc:name="Logger" doc:id="fe3d6a4f-91e0-4bc8-ab26-d15757f970da" message="#[message]"/>
+		<set-variable value="#[attributes.queryParams.Name]" doc:name="Set Variable" doc:id="a7c0af1a-3012-4d2b-b6b6-f2c94b134d81" variableName="vname"/>
+		<set-payload value="success...." doc:name="Set Payload" doc:id="8609021d-760b-47a7-a026-815cd332b19c" />
+		<logger level="INFO" doc:name="Logger" doc:id="65eb01e7-2fbd-46bc-9aff-3d50e4a2c6f0" message="#[vars.name]"/>
+	</flow>
+</mule>
